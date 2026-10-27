@@ -57,3 +57,9 @@ No se ha probado SSO contra un servidor real en esta implementación porque toda
 ## Vista previa sin iniciar sesión
 
 El botón **Ver demo del panel** de la pantalla de acceso abre una maqueta independiente de solo lectura. Usa datos ficticios incluidos en `DemoWorkspace`, no cambia el estado de autenticación ni muestra el editor o los documentos de una sesión real. Permite revisar el diseño mientras se configura Keycloak. Salir de la demo devuelve al acceso protegido.
+
+## Datos personales y portal de cuenta
+
+El avatar de usuarios autenticados abre **Mi perfil**. El botón **Actualizar mis datos** usa `keycloak.accountManagement()` para abrir la consola oficial del realm. Habilita la consola de cuenta de Keycloak y configura los atributos editables/verificaciones de correo según la política de la organización. Los datos leídos del token se actualizan en la interfaz al renovar la sesión; no se sobrescriben con datos del navegador. No se han validado cambios reales porque no hay servidor configurado.
+
+La demo tiene un formulario separado que solo modifica un perfil ficticio en memoria, incluida una foto local. No modifica Keycloak, Google, roles ni almacenamiento persistente.

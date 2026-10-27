@@ -56,3 +56,11 @@ En **Acceso administrativo → Ver demo del panel** puedes recorrer las seis sec
 El botón **Hablar con un experto** está destacado en Inicio, Catálogo y Carrito para visitantes; no se muestra en acceso administrativo, demo ni sesiones administrativas. El logotipo horizontal se sirve desde `public/ingenia-cyber-logo.png`.
 
 `scripts/preview-smoke.cjs` verifica la vista previa, el CTA público, la ausencia de escrituras y la navegación móvil con el servidor local del puerto 5173 activo. Requiere Playwright y Chromium, igual que las demás pruebas de navegador.
+
+## Perfil del usuario
+
+El avatar de la esquina superior derecha aparece en la demo y en sesiones autenticadas. Abre **Mi perfil**. En la demo puedes probar nombre, correo, teléfono, empresa, cargo y foto con datos ficticios: solo se mantienen en memoria, no se envían ni se guardan en localStorage. Recargar restablece el perfil inicial. A diferencia del resto de la demo, el formulario de perfil permite esta edición simulada. Las fotos admiten PNG, JPG o WebP de hasta 2 MB.
+
+Para usuarios autenticados, el perfil muestra el nombre y correo de la sesión; **Actualizar mis datos** abre el portal oficial de cuenta de Keycloak. Allí se actualizan los atributos habilitados por la organización. Los datos vinculados a Google pueden requerir cambios desde Google. El frontend reflejará los cambios al renovar la sesión. La actualización contra un servidor real sigue pendiente de configurar y validar.
+
+`scripts/profile-smoke.cjs` verifica avatar, edición, foto, cancelación, móvil y apertura del portal con SDK simulado. Usa los mismos servidores y requisitos que `auth-smoke.cjs`.
