@@ -1,9 +1,10 @@
-import { LogIn, ShieldCheck, LogOut, ArrowRight } from 'lucide-react';
+import { LogIn, ShieldCheck, LogOut, ArrowRight, Eye } from 'lucide-react';
 import { useAuth } from './AuthProvider';
-export function AdminAccess(){
+export function AdminAccess({onPreview}:{onPreview:()=>void}){
  const auth=useAuth();
  return <section className="panel access-panel"><span className="service-icon blue large"><ShieldCheck size={30}/></span><span className="eyebrow">PERSONAL AUTORIZADO</span><h2>Acceso administrativo</h2><p>El catálogo es público. La gestión, las auditorías y los documentos requieren una cuenta con permisos administrativos.</p>
  {auth.loading?<p role="status">Comprobando tu sesión…</p>:!auth.configured?<div className="access-message"><strong>Inicio de sesión pendiente de configuración</strong><p>El responsable del sitio debe conectar el servidor Keycloak. El área administrativa permanecerá cerrada hasta entonces.</p></div>:auth.authenticated&&!auth.isAdmin?<div className="access-message"><strong>Tu cuenta no tiene permisos administrativos</strong><p>Contacta con el administrador para que asigne el rol correspondiente. Iniciar sesión con Google no concede permisos automáticamente.</p><button className="button secondary" onClick={()=>void auth.logout()}><LogOut size={16}/>Cerrar sesión</button></div>:<div className="access-buttons"><button className="button primary" onClick={()=>void auth.login()}><LogIn size={17}/>Entrar con Keycloak<ArrowRight size={16}/></button>{auth.googleAvailable&&<button className="button secondary" onClick={()=>void auth.login(true)}><span className="google-letter" aria-hidden="true">G</span>Continuar con Google</button>}</div>}
+ <div className="preview-access"><strong>Explora cómo se verá tu panel</strong><p>Recorre las pantallas con datos ficticios, sin iniciar sesión.</p><button className="button primary" onClick={onPreview}><Eye size={18}/>Ver demo del panel</button><small>Solo lectura. No permite editar ni acceder a información privada.</small></div>
  {auth.error&&<p className="admin-feedback error" role="alert">{auth.error}</p>}
  <small>Google se conecta a través de Keycloak. Solo las cuentas autorizadas pueden acceder al área administrativa.</small></section>;
 }

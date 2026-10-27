@@ -53,3 +53,7 @@ Reinicia Vite tras editar las variables. Para producción, las variables se inco
 Cuando el servidor esté disponible, verifica: un visitante solo ve las páginas públicas; un usuario sin rol recibe acceso denegado; un administrador ve las seis secciones; el botón Google redirige al proveedor correcto; cerrar sesión oculta inmediatamente la zona privada; un fallo de renovación retira el acceso.
 
 No se ha probado SSO contra un servidor real en esta implementación porque todavía no se ha configurado. Las pruebas automatizadas usan un doble del SDK exclusivamente en el navegador de prueba. Ese doble no se importa en la aplicación ni se incluye en el build de producción.
+
+## Vista previa sin iniciar sesión
+
+El botón **Ver demo del panel** de la pantalla de acceso abre una maqueta independiente de solo lectura. Usa datos ficticios incluidos en `DemoWorkspace`, no cambia el estado de autenticación ni muestra el editor o los documentos de una sesión real. Permite revisar el diseño mientras se configura Keycloak. Salir de la demo devuelve al acceso protegido.

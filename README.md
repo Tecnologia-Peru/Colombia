@@ -48,3 +48,11 @@ El público puede acceder a Inicio, Catálogo, detalle, carrito y cotización. E
 Consulta [la guía de Keycloak y Google](docs/keycloak.md) y completa `.env.local` a partir de `.env.example`. No se han configurado credenciales ni probado SSO real. La API y los documentos privados reales siguen pendientes de implementar; la autorización de frontend no sustituye los controles de un backend.
 
 Las pruebas `scripts/auth-smoke.cjs` y `scripts/admin-smoke.cjs` necesitan Playwright y Chromium. Para el servidor con proveedor **simulado solo en las pruebas**, inicia Vite en el puerto 5174 con `VITE_KEYCLOAK_URL=https://identity.example.test VITE_KEYCLOAK_REALM=ingenia VITE_KEYCLOAK_CLIENT_ID=ingenia-web VITE_KEYCLOAK_GOOGLE_IDP=google npm run dev -- --port 5174`; mantén otro servidor sin configuración en el 5173. Ejecuta después `node scripts/auth-smoke.cjs` y `node scripts/admin-smoke.cjs`. Estas URL de prueba no sirven para iniciar sesión real.
+
+## Vista previa del panel
+
+En **Acceso administrativo → Ver demo del panel** puedes recorrer las seis secciones sin configurar Keycloak. La demostración usa exclusivamente datos ficticios de `src/components/DemoWorkspace.tsx`; no inicia sesión, no cambia roles y no permite editar servicios ni consultar documentos privados. **Salir de la demo** vuelve a la pantalla de acceso. Las pantallas administrativas reales siguen exigiendo el rol de Keycloak.
+
+El botón **Hablar con un experto** está destacado en Inicio, Catálogo y Carrito para visitantes; no se muestra en acceso administrativo, demo ni sesiones administrativas. El logotipo horizontal se sirve desde `public/ingenia-cyber-logo.png`.
+
+`scripts/preview-smoke.cjs` verifica la vista previa, el CTA público, la ausencia de escrituras y la navegación móvil con el servidor local del puerto 5173 activo. Requiere Playwright y Chromium, igual que las demás pruebas de navegador.
