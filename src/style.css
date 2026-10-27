@@ -11,3 +11,5 @@
 .sidebar>.nav-label{margin-top:36px}.sidebar>nav{flex:1;padding-bottom:20px}
 
 .brand{gap:0;letter-spacing:-.7px}.brand-name{display:flex;flex-direction:column;font-size:23px;line-height:1.12}.brand-name>span{font-size:15px;letter-spacing:2px;color:#536dfe;font-weight:650;margin-top:3px}.brand-icon{flex-shrink:0}.brand-name .brand-dot{letter-spacing:0}
+
+.brand{gap:10px;padding-left:8px;letter-spacing:0;align-items:center}.brand-symbol{display:block;width:44px;height:50px;flex-shrink:0;filter:drop-shadow(0 3px 5px #2572ff16)}.brand-wordmark{display:flex;flex-direction:column;font-family:Arial,Helvetica,sans-serif;font-size:24px;line-height:1.05;font-weight:800;letter-spacing:-.6px;color:#101f3e}.brand-wordmark>span{font-size:13px;font-weight:700;letter-spacing:5.8px;color:#2676ff;margin-top:5px}@media(min-width:701px) and (max-width:1200px){.brand{gap:8px;padding-left:4px}.brand-symbol{width:37px;height:44px}.brand-wordmark{font-size:21px}.brand-wordmark>span{font-size:11px;letter-spacing:5.3px}}
