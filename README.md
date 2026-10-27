@@ -81,3 +81,9 @@ Inicio y Catálogo no comprueban SSO mediante redirecciones al cargar. El SDK pr
 **Cerrar sesión** está disponible tanto dentro del perfil como en el menú lateral para cualquier usuario autenticado, tenga o no rol administrativo. Desde el perfil vuelve a Inicio y retira inmediatamente el acceso local, incluso si falla el proveedor o termina una renovación de token pendiente. El cierre remoto usa el logout oficial de Keycloak con retorno al origen actual. La cuenta de Google del navegador permanece independiente. En la demo se ofrece **Salir de la demostración**, sin simular un cierre de cuenta real.
 
 `scripts/profile-logout-smoke.cjs` prueba estos casos con el SDK simulado, incluidas la expiración de permisos al cerrar y una respuesta de renovación tardía. La validación con el servidor de identidad real corresponde al despliegue configurado.
+
+### Entrada al espacio administrativo
+
+Al completar un inicio de sesión con rol administrativo, la aplicación abre **Mi dashboard** y presenta las seis secciones de gestión. Al cerrar la sesión regresa a Inicio y muestra Inicio/Catálogo públicos. Un usuario autenticado sin el rol requerido recibe una explicación y los datos del realm/cliente al que debe asignarse el permiso. Un cambio de Client ID no transfiere roles de cliente automáticamente: para `clientid-web-react` utiliza el rol de realm `admin` o el rol `admin` de ese cliente, incluido en el access token.
+
+`scripts/workspace-routing-smoke.cjs` comprueba esta navegación con el cliente de desarrollo actual, roles de realm y de cliente, usuario sin rol, rol exclusivo del cliente anterior, revocación y salida al espacio público. No se concede acceso administrativo por el solo hecho de entrar con Google.

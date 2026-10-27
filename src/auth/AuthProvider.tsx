@@ -19,7 +19,7 @@ function initialize(){
  return initialization;
 }
 type AuthState={loading:boolean;authenticated:boolean;isAdmin:boolean;name:string;email:string;username:string;emailVerified:boolean|null;error:string};
-type AuthContextValue=AuthState&{configured:boolean;googleAvailable:boolean;login:(google?:boolean)=>Promise<void>;logout:()=>Promise<void>;manageAccount:()=>Promise<void>};
+type AuthContextValue=AuthState&{configured:boolean;googleAvailable:boolean;requiredRole:string;clientId:string;realm:string;login:(google?:boolean)=>Promise<void>;logout:()=>Promise<void>;manageAccount:()=>Promise<void>};
 const initial:AuthState={loading:configured,authenticated:false,isAdmin:false,name:'',email:'',username:'',emailVerified:null,error:''};
 const AuthContext=createContext<AuthContextValue|undefined>(undefined);
 export function AuthProvider({children}:{children:ReactNode}){
@@ -54,6 +54,6 @@ export function AuthProvider({children}:{children:ReactNode}){
   try{const pending=client?.logout({redirectUri:window.location.origin+'/'});client?.clearToken();await pending;}
   catch{client?.clearToken();setState({...initial,loading:false,error:'La sesión local se cerró. No se pudo confirmar el cierre en el proveedor.'});}
  }
- return <AuthContext.Provider value={{...state,configured,googleAvailable:!!googleIdp,login,logout,manageAccount}}>{children}</AuthContext.Provider>;
+ return <AuthContext.Provider value={{...state,configured,googleAvailable:!!googleIdp,requiredRole:adminRole,clientId:clientId||'',realm:realm||'',login,logout,manageAccount}}>{children}</AuthContext.Provider>;
 }
 export function useAuth(){const auth=useContext(AuthContext);if(!auth)throw new Error('Falta AuthProvider.');return auth;}

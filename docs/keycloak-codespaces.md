@@ -76,3 +76,9 @@ npm run dev
 ```
 
 Prueba Keycloak y Google con un usuario sin rol y con uno administrativo. Verifica acceso denegado al primero, acceso a las seis secciones al segundo, cierre de sesión y portal de perfil. Todavía no se ha realizado esta validación real. La demo sigue disponible y no requiere activar estas variables.
+
+## Si Google entra pero no aparece el panel
+
+El Client ID actual del frontend es **clientid-web-react**. En **clientes-dev → Users → tu usuario → Role mapping**, asigna el rol de realm **admin**; alternativamente, asigna el rol **admin** del cliente **clientid-web-react**. Un rol del cliente anterior no se aplica al nuevo. Comprueba que los mappers/scopes de roles incluyen el permiso en el access token. Cierra sesión y vuelve a entrar para recibir los permisos actualizados; no compartas tokens por chat.
+
+Con ese rol, la aplicación abre automáticamente el dashboard y muestra el menú administrativo. Sin él, muestra la pantalla de permisos pendientes. Cerrar sesión devuelve al catálogo público sin iniciar una autenticación automática.
