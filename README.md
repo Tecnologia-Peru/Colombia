@@ -1,4 +1,4 @@
-# Clarity · Servicios de ciberseguridad
+# Ingenia Cyber · Servicios de ciberseguridad
 
 Frontend de demostración en React, TypeScript, Vite y Tailwind CSS. Diseño claro con catálogo público y portal del cliente.
 

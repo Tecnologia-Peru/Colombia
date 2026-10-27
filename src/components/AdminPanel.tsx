@@ -17,7 +17,7 @@ export function AdminPanel({services,onSave,initialError}:Props){
   catch(e){setError(e instanceof Error?e.message:'No se pudo guardar el catálogo.');setMessage('');return false;}
  }
  function edit(s:Service){setEditing({...s});setFeatures(s.features.join('\n'));setError('');setMessage('');}
- function exportFile(){const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,services:exportableCatalog(services)},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='clarity-catalogo.json';a.click();URL.revokeObjectURL(url);}
+ function exportFile(){const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,services:exportableCatalog(services)},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='ingenia-cyber-catalogo.json';a.click();URL.revokeObjectURL(url);}
  async function importFile(file:File){
   try{if(file.size>100000)throw new Error('El archivo supera el límite de 100 KB.');const data=JSON.parse(await file.text());if(data.version!==1)throw new Error('Versión de archivo no compatible.');setPendingImport(parseCatalog(data.services));setError('');setMessage('');}
   catch(e){setError(e instanceof Error?e.message:'No se pudo leer el archivo.');}
