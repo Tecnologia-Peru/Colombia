@@ -24,7 +24,7 @@ npm run preview
 - `src/style.css`: sistema visual, Tailwind CSS y estilos responsive.
 - `vite.config.ts`: integración de React y Tailwind CSS.
 
-El catálogo usa datos simulados. El carrito vive en memoria y se reinicia al recargar. El formulario valida los campos y muestra una confirmación local; no envía datos. Los documentos descargables son ejemplos en texto. No hay autenticación, pagos, backend ni reservas reales. Los precios son estimados en COP y no incluyen impuestos. Los indicadores comerciales y de auditoría son demostrativos.
+El catálogo usa datos simulados. El carrito vive en memoria y se reinicia al recargar. El formulario valida los campos y muestra una confirmación local; no envía datos. Los documentos descargables son ejemplos en texto. El acceso administrativo se integra con Keycloak (requiere configuración). No hay pagos, backend ni reservas reales. Los precios son estimados en COP y no incluyen impuestos. Los indicadores comerciales y de auditoría son demostrativos.
 
 Para producción se requiere conectar API, autenticación/autorización, persistencia, documentos privados, cotizaciones y pagos. No introducir credenciales en el frontend.
 
@@ -32,10 +32,19 @@ Para producción se requiere conectar API, autenticación/autorización, persist
 
 Abre **Administración** en el menú lateral y pulsa **Editar** en un servicio. Puedes cambiar el nombre, categoría, descripción, precio en COP, duración, etiqueta y entregables. **Guardar cambios** actualiza el catálogo, el detalle, el formulario y el carrito en ese navegador.
 
-Este editor es una demostración sin autenticación ni backend. Guarda el catálogo en `localStorage`: no se comparte con otras personas, no modifica GitHub y puede perderse al borrar los datos del navegador o cambiar la dirección de acceso del Codespace. Usa **Exportar copia** para descargar un JSON e **Importar copia** para recuperarlo en otro navegador. Las importaciones se validan antes de confirmar el reemplazo; **Restaurar originales** también requiere confirmación.
+Este editor requiere un rol administrativo en Keycloak; los datos continúan siendo de demostración y no hay backend. Guarda el catálogo en `localStorage`: no se comparte con otras personas, no modifica GitHub y puede perderse al borrar los datos del navegador o cambiar la dirección de acceso del Codespace. Usa **Exportar copia** para descargar un JSON e **Importar copia** para recuperarlo en otro navegador. Las importaciones se validan antes de confirmar el reemplazo; **Restaurar originales** también requiere confirmación.
 
 - `src/catalog.ts`: datos iniciales, validación y persistencia local.
 - `src/components/AdminPanel.tsx`: editor, exportación/importación y restauración.
 - `scripts/admin-smoke.cjs`: prueba de navegador para edición, persistencia, integración con el catálogo/carrito, copias y recuperación. Requiere Playwright y Chromium disponibles; con el servidor activo ejecuta `node scripts/admin-smoke.cjs`. En instalaciones externas puedes indicar `PLAYWRIGHT_MODULE` y `CHROMIUM_PATH`.
 
-La administración compartida real requiere un backend con autorización y almacenamiento persistente. No guardes secretos ni información privada en este editor.
+La administración compartida requiere además un backend con autorización y almacenamiento persistente. No guardes secretos ni información privada en este editor.
+
+
+## Público y administración
+
+El público puede acceder a Inicio, Catálogo, detalle, carrito y cotización. El portal y la administración requieren una sesión de Keycloak y el rol `admin` de realm o del cliente configurado. Google se conecta mediante Keycloak. Sin configuración, el área administrativa está cerrada.
+
+Consulta [la guía de Keycloak y Google](docs/keycloak.md) y completa `.env.local` a partir de `.env.example`. No se han configurado credenciales ni probado SSO real. La API y los documentos privados reales siguen pendientes de implementar; la autorización de frontend no sustituye los controles de un backend.
+
+Las pruebas `scripts/auth-smoke.cjs` y `scripts/admin-smoke.cjs` necesitan Playwright y Chromium. Para el servidor con proveedor **simulado solo en las pruebas**, inicia Vite en el puerto 5174 con `VITE_KEYCLOAK_URL=https://identity.example.test VITE_KEYCLOAK_REALM=ingenia VITE_KEYCLOAK_CLIENT_ID=ingenia-web VITE_KEYCLOAK_GOOGLE_IDP=google npm run dev -- --port 5174`; mantén otro servidor sin configuración en el 5173. Ejecuta después `node scripts/auth-smoke.cjs` y `node scripts/admin-smoke.cjs`. Estas URL de prueba no sirven para iniciar sesión real.

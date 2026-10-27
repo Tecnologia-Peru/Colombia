@@ -1,12 +1,14 @@
 // Run against npm run dev. Playwright must be available in the execution environment.
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
+const { mockIdentity } = require('./auth-fixture.cjs');
 (async () => {
  const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}), args: ['--no-sandbox'] });
  try {
  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
  const errors = []; page.on('pageerror', e => errors.push(e.message));
- await page.goto(process.env.TEST_URL || 'http://127.0.0.1:5173');
+ await mockIdentity(page);
+ await page.goto(process.env.TEST_URL || 'http://127.0.0.1:5174');
  const admin = () => page.locator('nav').getByRole('button', { name: 'Administración', exact: true }).click();
  await admin();
  await page.getByRole('button', { name: 'Editar Pentesting de aplicaciones web', exact: true }).click();
