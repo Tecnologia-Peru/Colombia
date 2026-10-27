@@ -47,7 +47,7 @@ El público puede acceder a Inicio, Catálogo, detalle, carrito y cotización. E
 
 Consulta [la guía de Keycloak y Google](docs/keycloak.md) y completa `.env.local` a partir de `.env.example`. No se han configurado credenciales ni probado SSO real. La API y los documentos privados reales siguen pendientes de implementar; la autorización de frontend no sustituye los controles de un backend.
 
-Las pruebas `scripts/auth-smoke.cjs` y `scripts/admin-smoke.cjs` necesitan Playwright y Chromium. Para el servidor con proveedor **simulado solo en las pruebas**, inicia Vite en el puerto 5174 con `VITE_KEYCLOAK_URL=https://identity.example.test VITE_KEYCLOAK_REALM=ingenia VITE_KEYCLOAK_CLIENT_ID=ingenia-web VITE_KEYCLOAK_GOOGLE_IDP=google npm run dev -- --port 5174`; mantén otro servidor sin configuración en el 5173. Ejecuta después `node scripts/auth-smoke.cjs` y `node scripts/admin-smoke.cjs`. Estas URL de prueba no sirven para iniciar sesión real.
+Las pruebas `scripts/auth-smoke.cjs` y `scripts/admin-smoke.cjs` necesitan Playwright y Chromium. Para el servidor con proveedor **simulado solo en las pruebas**, inicia Vite en el puerto 5174 con `VITE_KEYCLOAK_URL=https://identity.example.test VITE_KEYCLOAK_REALM=ingenia VITE_KEYCLOAK_CLIENT_ID=ingenia-web VITE_KEYCLOAK_GOOGLE_IDP=google npm run dev -- --port 5174`; mantén otro servidor sin configuración en el 5175 (`VITE_KEYCLOAK_URL= VITE_KEYCLOAK_REALM= VITE_KEYCLOAK_CLIENT_ID= npm run dev -- --port 5175`). Ejecuta después `node scripts/auth-smoke.cjs` y `node scripts/admin-smoke.cjs`. Estas URL de prueba no sirven para iniciar sesión real.
 
 ## Vista previa del panel
 
@@ -66,3 +66,10 @@ Para usuarios autenticados, el perfil muestra el nombre y correo de la sesión; 
 `scripts/profile-smoke.cjs` verifica avatar, edición, foto, cancelación, móvil y apertura del portal con SDK simulado. Usa los mismos servidores y requisitos que `auth-smoke.cjs`.
 
 Las direcciones actuales proporcionadas para ambos Codespaces y los campos exactos que registrar en Keycloak están en [Conectar los Codespaces actuales](docs/keycloak-codespaces.md). El cliente público fue confirmado y `.env.development` carga esos datos automáticamente en desarrollo. Reinicia Vite después de actualizar. `.env.local` o variables del proceso tienen prioridad; producción requiere su propia configuración.
+
+
+## Inicio de sesión voluntario
+
+Inicio y Catálogo no comprueban SSO mediante redirecciones al cargar. El SDK procesa el retorno de un inicio de sesión explícito, pero no usa `onLoad: check-sso` ni `login-required`. Abrir la pantalla de acceso tampoco redirige: hay que pulsar **Entrar con Keycloak** o **Continuar con Google**. Tras recargar, si no se está procesando un callback válido, la aplicación vuelve al modo público; la sesión del proveedor puede reutilizarse al pulsar Entrar. Los tokens no se persisten en el navegador.
+
+`scripts/public-login-smoke.cjs` usa el SDK real y una respuesta interceptada del proveedor de prueba para verificar que cargar, navegar y recargar no contacta al proveedor, y que el inicio explícito usa el retorno raíz y PKCE S256. No sustituye la validación del servidor Keycloak real.

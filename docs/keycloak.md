@@ -63,3 +63,10 @@ El botón **Ver demo del panel** de la pantalla de acceso abre una maqueta indep
 El avatar de usuarios autenticados abre **Mi perfil**. El botón **Actualizar mis datos** usa `keycloak.accountManagement()` para abrir la consola oficial del realm. Habilita la consola de cuenta de Keycloak y configura los atributos editables/verificaciones de correo según la política de la organización. Los datos leídos del token se actualizan en la interfaz al renovar la sesión; no se sobrescriben con datos del navegador. No se han validado cambios reales porque no hay servidor configurado.
 
 La demo tiene un formulario separado que solo modifica un perfil ficticio en memoria, incluida una foto local. No modifica Keycloak, Google, roles ni almacenamiento persistente.
+
+
+## Navegación pública sin redirección
+
+El SDK se inicializa sin `onLoad`, con `checkLoginIframe: false` y retorno explícito a `window.location.origin + '/'`. Solo procesa un callback válido o un inicio solicitado mediante los botones de acceso. No se intenta `check-sso` al abrir la tienda: sin iframe silencioso, esa opción produce navegación al proveedor incluso con `prompt=none`.
+
+El error **Invalid parameter: redirect_uri** indica que el retorno enviado no está permitido por el cliente Keycloak. Registra exactamente el origen HTTPS del Codespace de la plataforma con `/` final en **Valid redirect URIs** y **Valid post logout redirect URIs**. Registra ese origen sin ruta en **Web origins**. No uses la dirección del servidor Keycloak como retorno de la tienda. Consulta los valores actuales en [la guía de Codespaces](keycloak-codespaces.md).

@@ -13,7 +13,8 @@ function initialize(){
  if(!configured)throw new Error('Falta configurar Keycloak.');
  if(!initialization){
   client=new Keycloak({url:url!,realm:realm!,clientId:clientId!});
-  initialization=client.init({onLoad:'check-sso',pkceMethod:'S256',checkLoginIframe:false,responseMode:'query'});
+  // Process an explicit login callback, but never redirect public visitors for SSO.
+  initialization=client.init({pkceMethod:'S256',checkLoginIframe:false,responseMode:'query',redirectUri:window.location.origin+'/'});
  }
  return initialization;
 }
