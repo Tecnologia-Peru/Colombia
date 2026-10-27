@@ -70,3 +70,9 @@ La demo tiene un formulario separado que solo modifica un perfil ficticio en mem
 El SDK se inicializa sin `onLoad`, con `checkLoginIframe: false` y retorno explícito a `window.location.origin + '/'`. Solo procesa un callback válido o un inicio solicitado mediante los botones de acceso. No se intenta `check-sso` al abrir la tienda: sin iframe silencioso, esa opción produce navegación al proveedor incluso con `prompt=none`.
 
 El error **Invalid parameter: redirect_uri** indica que el retorno enviado no está permitido por el cliente Keycloak. Registra exactamente el origen HTTPS del Codespace de la plataforma con `/` final en **Valid redirect URIs** y **Valid post logout redirect URIs**. Registra ese origen sin ruta en **Web origins**. No uses la dirección del servidor Keycloak como retorno de la tienda. Consulta los valores actuales en [la guía de Codespaces](keycloak-codespaces.md).
+
+### Cerrar sesión desde el perfil
+
+La acción del perfil cierra la sesión local de inmediato, descarta los tokens del SDK y solicita el cierre a Keycloak usando el origen actual como `post_logout_redirect_uri`. Una renovación pendiente no debe restaurar los permisos después del cierre. Debes mantener ese origen con `/` final permitido en **Valid post logout redirect URIs** cuando cambie el Codespace.
+
+Cerrar Ingenia Cyber/Keycloak no equivale a cerrar la sesión global de Google en el navegador. Los métodos de autenticación, dispositivos y sesiones se administran en el portal de cuenta del realm; su disponibilidad depende de la configuración del servidor.

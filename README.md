@@ -73,3 +73,11 @@ Las direcciones actuales proporcionadas para ambos Codespaces y los campos exact
 Inicio y Catálogo no comprueban SSO mediante redirecciones al cargar. El SDK procesa el retorno de un inicio de sesión explícito, pero no usa `onLoad: check-sso` ni `login-required`. Abrir la pantalla de acceso tampoco redirige: hay que pulsar **Entrar con Keycloak** o **Continuar con Google**. Tras recargar, si no se está procesando un callback válido, la aplicación vuelve al modo público; la sesión del proveedor puede reutilizarse al pulsar Entrar. Los tokens no se persisten en el navegador.
 
 `scripts/public-login-smoke.cjs` usa el SDK real y una respuesta interceptada del proveedor de prueba para verificar que cargar, navegar y recargar no contacta al proveedor, y que el inicio explícito usa el retorno raíz y PKCE S256. No sustituye la validación del servidor Keycloak real.
+
+### Opciones de cuenta y cierre de sesión
+
+**Mi perfil** agrupa **Datos personales** y **Seguridad y sesión**. Muestra el tipo de cuenta, el usuario y el estado de verificación del correo cuando Keycloak lo incluye. Los botones de seguridad y dispositivos abren la consola de cuenta de Keycloak, donde se gestionan las opciones habilitadas por el servidor.
+
+**Cerrar sesión** está disponible tanto dentro del perfil como en el menú lateral para cualquier usuario autenticado, tenga o no rol administrativo. Desde el perfil vuelve a Inicio y retira inmediatamente el acceso local, incluso si falla el proveedor o termina una renovación de token pendiente. El cierre remoto usa el logout oficial de Keycloak con retorno al origen actual. La cuenta de Google del navegador permanece independiente. En la demo se ofrece **Salir de la demostración**, sin simular un cierre de cuenta real.
+
+`scripts/profile-logout-smoke.cjs` prueba estos casos con el SDK simulado, incluidas la expiración de permisos al cerrar y una respuesta de renovación tardía. La validación con el servidor de identidad real corresponde al despliegue configurado.
