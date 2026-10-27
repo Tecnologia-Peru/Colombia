@@ -4,21 +4,21 @@
 
 - Keycloak: `https://sturdy-barnacle-r4w5gvjjjj4rhp455-8081.app.github.dev`
 - Realm: `clientes-dev`
-- Cliente indicado: `clientes-api` (confirmado como cliente público: Client authentication OFF y Standard flow ON).
+- Cliente del frontend: `clientid-web-react` (debe ser público: Client authentication OFF y Standard flow ON).
 - Proveedor de identidad: `google`.
 - Aplicación: `https://infamous-spooky-tomb-g46vqwgggvvw39gjw-5173.app.github.dev/`
 - Rol propuesto: `admin` (pendiente de crear/asignar si todavía no existe).
 
 ## Ajustes del cliente en Keycloak
 
-En el realm **clientes-dev → Clients → clientes-api** comprueba:
+En el realm **clientes-dev → Clients → clientid-web-react** comprueba:
 
 - **Client authentication: OFF**.
 - **Standard flow: ON**.
 - **Implicit flow: OFF**, **Direct access grants: OFF**.
 - PKCE obligatorio con **S256**.
 
-Si `clientes-api` representa una API o requiere un secret, conserva ese cliente y crea un cliente público aparte llamado `ingenia-web` con estas opciones. Cambia entonces `VITE_KEYCLOAK_CLIENT_ID` en tu configuración local. Nunca pongas un client secret en React.
+El cliente `clientid-web-react` es el del frontend. No cambies el cliente de una API ni pongas un client secret en React.
 
 Registra estas direcciones en el cliente público:
 

@@ -13,10 +13,10 @@ La protección de esta versión es de navegación en el frontend. Los datos de s
 En tu servidor Keycloak, servido mediante HTTPS:
 
 1. Crea un realm para la empresa, por ejemplo `ingenia`.
-2. Crea un cliente OpenID Connect público, por ejemplo `ingenia-web`: **Client authentication OFF**, **Standard flow ON**, **Implicit flow OFF** y **Direct access grants OFF**. Exige PKCE con **S256** en su configuración avanzada.
+2. Crea un cliente OpenID Connect público, por ejemplo `clientid-web-react`: **Client authentication OFF**, **Standard flow ON**, **Implicit flow OFF** y **Direct access grants OFF**. Exige PKCE con **S256** en su configuración avanzada.
 3. En **Valid redirect URIs** registra la raíz exacta de tu web con `/` al final. La aplicación devuelve el inicio de sesión a esa URL, sin rutas adicionales. En **Valid post logout redirect URIs** registra la misma URL. En **Web origins** registra su origen, sin ruta. Evita comodines para dominios.
 4. Para Codespaces usa su URL HTTPS reenviada del puerto 5173, no el hostname interno del contenedor. Para desarrollo local puedes registrar también `http://localhost:5173/` y el origen `http://localhost:5173`.
-5. Crea el rol de realm `admin` y asígnalo únicamente al personal autorizado. También se acepta un rol de cliente `admin` perteneciente a `ingenia-web`. Comprueba que el access token incluye el claim de roles correspondiente. Las cuentas sin ese rol no tendrán acceso administrativo.
+5. Crea el rol de realm `admin` y asígnalo únicamente al personal autorizado. También se acepta un rol de cliente `admin` perteneciente a `clientid-web-react`. Comprueba que el access token incluye el claim de roles correspondiente. Las cuentas sin ese rol no tendrán acceso administrativo.
 6. Comprueba que el issuer de Keycloak y sus endpoints sean accesibles desde el navegador y que CORS permita el origen de la aplicación.
 
 ## 2. Configurar el frontend
@@ -26,7 +26,7 @@ Copia `.env.example` a `.env.local` y completa estos parámetros **públicos**:
 ```dotenv
 VITE_KEYCLOAK_URL=https://identidad.tu-dominio.com
 VITE_KEYCLOAK_REALM=ingenia
-VITE_KEYCLOAK_CLIENT_ID=ingenia-web
+VITE_KEYCLOAK_CLIENT_ID=clientid-web-react
 VITE_KEYCLOAK_ADMIN_ROLE=admin
 VITE_KEYCLOAK_GOOGLE_IDP=google
 ```
