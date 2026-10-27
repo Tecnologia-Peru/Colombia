@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 72" fill="none">
  <defs>
-  <linearGradient id="front" x1="8" y1="16" x2="49" y2="63" gradientUnits="userSpaceOnUse"><stop stop-color="#378DFF"/><stop offset="1" stop-color="#1760FF"/></linearGradient>
-  <linearGradient id="side" x1="32" y1="31" x2="56" y2="63" gradientUnits="userSpaceOnUse"><stop stop-color="#51A5FF"/><stop offset="1" stop-color="#2572FF"/></linearGradient>
+  <linearGradient id="shield" x1="8" y1="15" x2="51" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#3882F6"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+  <linearGradient id="fold" x1="31" y1="31" x2="57" y2="51" gradientUnits="userSpaceOnUse"><stop stop-color="#3882F6"/><stop offset="1" stop-color="#1760F5"/></linearGradient>
  </defs>
- <path d="M32 3 59 14 45 20 32 14 18 20 6 15Z" fill="#3287FF"/>
- <path d="M6 15 18 20 18 43 32 56 32 70 7 48Z" fill="url(#front)"/>
- <path d="m32 30 12-5 14-6-1 29-25 22V56l14-13V32l-9 4-5 12Z" fill="url(#side)"/>
- <path d="m18 20 14 6 12-5-12-6Z" fill="#ACD7FF"/>
- <path d="m22 26 10 5v17l-10-9Z" fill="#FFF"/>
- <path d="m32 31 10-4v12L32 48Z" fill="#D8ECFF"/>
+ <!-- Folded shield: open upper-right edge and a continuous lower silhouette. -->
+ <path d="M32 3 59 14 46 20 32 14 17 21 7 16Z" fill="#3882F6"/>
+ <path d="M7 16 18 21 32 28 59 18 58 45 32 68 7 46Z" fill="url(#shield)"/>
+ <path d="m32 28 27-10-1 27-26 23Z" fill="url(#fold)"/>
+ <path d="m18 21 14 7 14-5-14-7Z" fill="#A8D4FF"/>
+ <!-- White inset follows the same shield geometry, leaving a blue central stem. -->
+ <path d="m19 26 8 4v11l5 5 6-5V30l8-4v19L32 57 19 45Z" fill="white"/>
+ <path d="m27 30 5 3 6-3v11l-6 5-5-5Z" fill="#3882F6"/>
 </svg>
