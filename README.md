@@ -64,3 +64,5 @@ El avatar de la esquina superior derecha aparece en la demo y en sesiones autent
 Para usuarios autenticados, el perfil muestra el nombre y correo de la sesión; **Actualizar mis datos** abre el portal oficial de cuenta de Keycloak. Allí se actualizan los atributos habilitados por la organización. Los datos vinculados a Google pueden requerir cambios desde Google. El frontend reflejará los cambios al renovar la sesión. La actualización contra un servidor real sigue pendiente de configurar y validar.
 
 `scripts/profile-smoke.cjs` verifica avatar, edición, foto, cancelación, móvil y apertura del portal con SDK simulado. Usa los mismos servidores y requisitos que `auth-smoke.cjs`.
+
+Las direcciones actuales proporcionadas para ambos Codespaces y los campos exactos que registrar en Keycloak están en [Conectar los Codespaces actuales](docs/keycloak-codespaces.md). El cliente público fue confirmado y `.env.development` carga esos datos automáticamente en desarrollo. Reinicia Vite después de actualizar. `.env.local` o variables del proceso tienen prioridad; producción requiere su propia configuración.
