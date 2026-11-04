@@ -57,3 +57,5 @@ node scripts/preview-smoke.cjs
 ```
 
 Las pruebas Entra usan identidades y respuestas sintéticas. La segunda utiliza el SDK MSAL real para verificar el flujo OAuth/PKCE, sin credenciales reales. No sustituyen la prueba de inicio de sesión, roles y consentimiento con tu tenant.
+
+Si asignaste el rol y aún aparece acceso denegado, usa **Actualizar permisos** y consulta **Ver permisos de esta sesión**. Ese diagnóstico solo muestra nombres de roles y los IDs públicos de aplicación y tenant; no expone tokens. La prueba `scripts/entra-permissions-smoke.cjs` cubre la renovación y la lectura de claims actuales.

@@ -1,0 +1,16 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');const assert=require('node:assert/strict');const {mockEntra}=require('./entra-fixture.cjs');const origin=process.env.TEST_URL||'http://127.0.0.1:5173';
+(async()=>{const b=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox']});try{
+ for(const mode of ['member','wrong-role','fresh-callback','refresh-race']){
+ const p=await b.newPage({viewport:{width:390,height:844}});await mockEntra(p,mode);await p.goto(origin);
+ if(mode==='fresh-callback'){await p.getByRole('heading',{name:'Bienvenido, Administradora Demo',exact:true}).waitFor();await p.close();continue;}
+ if(mode==='refresh-race'){
+  // Return to access with a revoked role, then hold a manual refresh across logout.
+  await p.getByRole('heading',{name:'Bienvenido, Administradora Demo',exact:true}).waitFor();await p.getByRole('button',{name:'Mi perfil',exact:true}).click();await p.getByRole('dialog',{name:'Mi perfil',exact:true}).getByRole('button',{name:'Cerrar sesión',exact:true}).click();await p.getByRole('heading',{name:'Más confianza. Menos riesgos.',exact:true}).waitFor();await p.close();continue;
+ }
+ await p.getByText('Tu cuenta no tiene permisos administrativos',{exact:true}).waitFor();await p.getByText('Ver permisos de esta sesión',{exact:true}).click();const roles=p.locator('.permission-diagnostics');assert.match(await roles.innerText(),mode==='wrong-role'?/task\.escribir/:/Ninguno/);assert.match(await roles.innerText(),/administrator/);assert.match(await roles.innerText(),/232ff5c3-6ffb-40dd-8e01-58488bbab3e8/);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+ await p.getByRole('button',{name:'Actualizar permisos',exact:true}).click();await p.getByRole('status').filter({hasText:'Sesión renovada'}).waitFor();assert.equal(await p.evaluate(()=>window.__entra.silent.forceRefresh),true);assert.equal(await p.locator('nav').getByRole('button',{name:'Administración',exact:true}).count(),0);
+ await p.evaluate(()=>window.__failRefresh=true);await p.getByRole('button',{name:'Actualizar permisos',exact:true}).click();await p.getByRole('alert').filter({hasText:'No se pudieron renovar'}).waitFor();assert.equal(await p.locator('nav').getByRole('button',{name:'Administración',exact:true}).count(),0);
+ await p.evaluate(()=>{window.__failRefresh=false;window.__grantRole=true;});await p.getByRole('button',{name:'Actualizar permisos',exact:true}).click();await p.getByRole('heading',{name:'Bienvenido, Administradora Demo',exact:true}).waitFor();await p.getByRole('button',{name:'Abrir menú',exact:true}).click();await p.locator('nav').getByRole('button',{name:'Administración',exact:true}).click();await p.getByRole('heading',{name:'Gestión de servicios',exact:true}).waitFor();assert.equal(await p.evaluate(()=>window.__entra.silent.forceRefresh),true);await p.close();
+ }
+ console.log('PASS: diagnóstico de roles sin token, forceRefresh, acceso solo con administrator recibido, claims actuales frente a caché, fallo de actualización sin elevar permisos y móvil. MSAL simulado.');
+ }finally{await b.close();}})().catch(e=>{console.error(e);process.exitCode=1});

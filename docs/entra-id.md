@@ -70,3 +70,11 @@ node scripts/preview-smoke.cjs
 Puedes especificar `PLAYWRIGHT_MODULE` y `CHROMIUM_PATH` si las herramientas están fuera de la resolución estándar. Las dos primeras pruebas usan, respectivamente, MSAL simulado y el SDK real con respuestas HTTPS sintéticas de Microsoft. Prueban navegación pública, PKCE, scopes, intercambio del código, tenant, audiencias del ID token, roles, recarga y cierre. No prueban una cuenta o consentimiento real del tenant.
 
 Para completar la validación real, entra desde el Codespace con un usuario asignado a `administrator`, comprueba el panel y cierra la sesión. Repite con una cuenta sin el rol y verifica que se deniegue el área administrativa. No compartas access tokens, ID tokens, códigos ni refresh tokens.
+
+## Rol asignado pero el panel sigue bloqueado
+
+En Acceso administrativo, **Actualizar permisos** fuerza una nueva solicitud silenciosa a Microsoft (`forceRefresh: true`). El frontend usa los claims del ID token de la respuesta actual, priorizándolos sobre un objeto `AccountInfo` que pueda proceder de una entrada anterior de caché. Un fallo no concede permisos; si se necesita interacción, la página indica cerrar sesión y volver a entrar.
+
+**Ver permisos de esta sesión** muestra únicamente el rol esperado, los nombres de roles recibidos y los identificadores públicos del tenant y cliente. No muestra el JWT ni sus valores de acceso/renovación. Si los roles siguen siendo `Ninguno` o distintos de `administrator` después de renovar, comprueba en la aplicación empresarial de la SPA que la cuenta utilizada tenga asignado el rol correcto y no Acceso predeterminado. Verifica el campo Value del App Role, su estado habilitado y la cuenta seleccionada al entrar. La asignación de roles de la API no sustituye la del registro de la web.
+
+`scripts/entra-permissions-smoke.cjs` verifica permisos ausentes o distintos, renovación sin caché, errores sin elevar acceso y prioridad de los claims actuales frente a la cuenta en caché, con MSAL simulado.
