@@ -1,3 +1,5 @@
+> REFERENCIA HISTÓRICA: Keycloak está desactivado. La configuración activa está en [Microsoft Entra ID](entra-id.md).
+
 # Conectar los Codespaces actuales
 
 ## Direcciones proporcionadas

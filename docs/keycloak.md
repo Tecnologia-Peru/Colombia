@@ -1,3 +1,5 @@
+> REFERENCIA HISTÓRICA: Keycloak está desactivado. La configuración activa está en [Microsoft Entra ID](entra-id.md).
+
 # Acceso administrativo con Keycloak y Google
 
 Inicio, Catálogo, detalle, carrito y cotización son públicos. Mi dashboard, Mis solicitudes, Reservas, Auditorías, Documentos y Administración se muestran solo a una sesión autenticada con el rol administrativo. El indicador «Entorno seguro» se eliminó y los visitantes ya no ven el avatar ni las notificaciones administrativas.
