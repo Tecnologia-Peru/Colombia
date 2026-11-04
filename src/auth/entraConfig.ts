@@ -4,6 +4,8 @@ export const clientId=import.meta.env.VITE_ENTRA_CLIENT_ID?.trim()||'';
 export const requiredRole=import.meta.env.VITE_ENTRA_ADMIN_ROLE?.trim()||'administrator';
 export const apiScopes=(import.meta.env.VITE_ENTRA_API_SCOPES||'').split(/[;\s]+/).map((s:string)=>s.trim()).filter(Boolean) as string[];
 const guid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+// Object IDs belong to the configured tenant; email/display name are never used.
+export const adminObjectIds=(import.meta.env.VITE_ENTRA_ADMIN_OBJECT_IDS||'').split(/[;,\s]+/).map((id:string)=>id.trim().toLowerCase()).filter((id:string)=>guid.test(id)) as string[];
 export const configured=guid.test(tenantId)&&guid.test(clientId);
 export const redirectUri=window.location.origin+'/';
 export const loginScopes=['openid','profile','email',...apiScopes];

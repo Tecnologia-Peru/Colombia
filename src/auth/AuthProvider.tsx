@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { PublicClientApplication, type AccountInfo, type AuthenticationResult } from '@azure/msal-browser';
-import { apiScopes, clientId, configured, loginScopes, msalConfig, redirectUri, requiredRole, tenantId } from './entraConfig';
+import { adminObjectIds, apiScopes, clientId, configured, loginScopes, msalConfig, redirectUri, requiredRole, tenantId } from './entraConfig';
 
 let msal:PublicClientApplication|undefined;
 let initialization:Promise<AccountInfo|null>|undefined;
@@ -36,9 +36,9 @@ function initialize(){
  }
  return initialization;
 }
-type AuthState={loading:boolean;authenticated:boolean;isAdmin:boolean;name:string;email:string;username:string;emailVerified:boolean|null;roles:string[];error:string};
+type AuthState={loading:boolean;authenticated:boolean;isAdmin:boolean;name:string;email:string;username:string;emailVerified:boolean|null;roles:string[];objectId:string;error:string};
 type AuthContextValue=AuthState&{configured:boolean;requiredRole:string;clientId:string;tenantId:string;login:()=>Promise<void>;logout:()=>Promise<void>;manageAccount:()=>Promise<void>;getApiAccessToken:()=>Promise<string>;refreshPermissions:()=>Promise<void>};
-const initial:AuthState={loading:configured,authenticated:false,isAdmin:false,name:'',email:'',username:'',emailVerified:null,roles:[],error:''};
+const initial:AuthState={loading:configured,authenticated:false,isAdmin:false,name:'',email:'',username:'',emailVerified:null,roles:[],objectId:'',error:''};
 const AuthContext=createContext<AuthContextValue|undefined>(undefined);
 export function AuthProvider({children}:{children:ReactNode}){
  const [state,setState]=useState<AuthState>(initial);
@@ -51,7 +51,9 @@ export function AuthProvider({children}:{children:ReactNode}){
   accountRef.current=account;
   const claims=account?.idTokenClaims;
   const roles=Array.isArray(claims?.roles)?claims.roles.filter((role):role is string=>typeof role==='string'):[];
-  setState({loading:false,authenticated:!!account,isAdmin:!!account&&roles.includes(requiredRole),name:account?.name||account?.username||'',email:typeof claims?.email==='string'?claims.email:account?.username||'',username:account?.username||'',emailVerified:null,roles,error:''});
+  const objectId=typeof claims?.oid==='string'?claims.oid.toLowerCase():'';
+  const listedUser=!!objectId&&adminObjectIds.includes(objectId);
+  setState({loading:false,authenticated:!!account,isAdmin:!!account&&(roles.includes(requiredRole)||listedUser),name:account?.name||account?.username||'',email:typeof claims?.email==='string'?claims.email:account?.username||'',username:account?.username||'',emailVerified:null,roles,objectId,error:''});
  }
  useEffect(()=>{
   if(!configured)return;

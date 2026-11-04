@@ -40,7 +40,7 @@ El retorno y el post-logout se calculan con `window.location.origin + '/'`: regi
 - `src/auth/AdminAccess.tsx`: botón único de Microsoft y explicación cuando falta el rol.
 - `src/components/UserProfile.tsx`: perfil, acceso a Mi cuenta de Microsoft y cierre.
 
-`loginRedirect()` solicita los scopes OIDC y los dos scopes de la API. MSAL prepara `state`, `nonce` y PKCE y procesa el retorno mediante `handleRedirectPromise()`. El panel exige que el ID token corresponda al client y tenant configurados y tenga `roles: ["administrator"]`.
+`loginRedirect()` solicita los scopes OIDC y los dos scopes de la API. MSAL prepara `state`, `nonce` y PKCE y procesa el retorno mediante `handleRedirectPromise()`. El panel exige que el ID token corresponda al client y tenant configurados. Además requiere `roles: ["administrator"]` o un `oid` incluido expresamente en la lista administrativa de ese tenant.
 
 `useAuth().getApiAccessToken()` utiliza `acquireTokenSilent()` para obtener el access token destinado a la API. Si falta consentimiento o se requiere interacción, rechaza la promesa; el consumidor debe mostrar la necesidad de volver a iniciar sesión, sin registrar tokens. No hay endpoint de API proporcionado ni se han añadido llamadas reales al backend. El catálogo y las auditorías siguen siendo simulados.
 
@@ -78,3 +78,16 @@ En Acceso administrativo, **Actualizar permisos** fuerza una nueva solicitud sil
 **Ver permisos de esta sesión** muestra únicamente el rol esperado, los nombres de roles recibidos y los identificadores públicos del tenant y cliente. No muestra el JWT ni sus valores de acceso/renovación. Si los roles siguen siendo `Ninguno` o distintos de `administrator` después de renovar, comprueba en la aplicación empresarial de la SPA que la cuenta utilizada tenga asignado el rol correcto y no Acceso predeterminado. Verifica el campo Value del App Role, su estado habilitado y la cuenta seleccionada al entrar. La asignación de roles de la API no sustituye la del registro de la web.
 
 `scripts/entra-permissions-smoke.cjs` verifica permisos ausentes o distintos, renovación sin caché, errores sin elevar acceso y prioridad de los claims actuales frente a la cuenta en caché, con MSAL simulado.
+
+
+## Usuario administrativo autorizado sin App Role
+
+Se añadió la excepción solicitada para el Object ID `4c166ec7-74ea-42aa-a147-868e7d8483f6`, únicamente dentro del tenant `53770323-9420-426e-b424-32979b5ea334` y de la SPA configurada. Está en `VITE_ENTRA_ADMIN_OBJECT_IDS` de `.env.development` y `.env.example`.
+
+La decisión usa `oid` del ID token validado por el flujo MSAL, junto con sus comprobaciones existentes de `tid`, tenant de la cuenta y `aud` de la SPA. No se autoriza por email, nombre, `homeAccountId` ni por datos del formulario. Las entradas de configuración deben ser UUID válidos; una lista vacía no concede excepciones. Se conserva la vía del App Role `administrator` para las demás cuentas. El mismo `oid` en otro tenant o una respuesta de otra audiencia no autoriza acceso.
+
+Reinicia Vite después de actualizar la configuración. `.env.local` o una variable del proceso con el mismo nombre sobrescriben la lista del repositorio. El diagnóstico de permisos muestra el `oid` de la sesión para poder comparar el usuario; no muestra el token completo.
+
+Esta autorización corresponde al panel frontend de demostración. No asigna roles en Entra ni concede permisos de API: el backend debe aplicar también su propia autorización validando tokens y la combinación `tid` + `oid` si adopta la misma política. Los scopes de API y sus consentimientos siguen siendo independientes.
+
+`scripts/entra-user-access-smoke.cjs` comprueba la excepción sin rol, los usuarios sin autorización, mismo `oid` en otro tenant, otra audiencia, email coincidente con distinto identificador, logout y acceso público, usando MSAL simulado.

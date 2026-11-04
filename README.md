@@ -59,3 +59,6 @@ node scripts/preview-smoke.cjs
 Las pruebas Entra usan identidades y respuestas sintéticas. La segunda utiliza el SDK MSAL real para verificar el flujo OAuth/PKCE, sin credenciales reales. No sustituyen la prueba de inicio de sesión, roles y consentimiento con tu tenant.
 
 Si asignaste el rol y aún aparece acceso denegado, usa **Actualizar permisos** y consulta **Ver permisos de esta sesión**. Ese diagnóstico solo muestra nombres de roles y los IDs públicos de aplicación y tenant; no expone tokens. La prueba `scripts/entra-permissions-smoke.cjs` cubre la renovación y la lectura de claims actuales.
+
+
+Se configuró una cuenta administrativa explícita mediante `VITE_ENTRA_ADMIN_OBJECT_IDS`, usando el Object ID proporcionado y el tenant de la organización. Esa cuenta puede abrir el panel sin App Role; para las demás se conserva `administrator`. Reinicia Vite después del pull. Los permisos de API no cambian. Consulta la sección de usuarios autorizados de [la guía Entra](docs/entra-id.md).
