@@ -1,0 +1,21 @@
+services:
+  web:
+    image: ingenia-cyber:local
+    build:
+      context: .
+      args:
+        VITE_ENTRA_TENANT_ID: ${VITE_ENTRA_TENANT_ID:?Use --env-file .env.example or provide VITE_ENTRA_TENANT_ID}
+        VITE_ENTRA_CLIENT_ID: ${VITE_ENTRA_CLIENT_ID:?Use --env-file .env.example or provide VITE_ENTRA_CLIENT_ID}
+        VITE_ENTRA_ADMIN_ROLE: ${VITE_ENTRA_ADMIN_ROLE:-administrator}
+        VITE_ENTRA_ADMIN_OBJECT_IDS: ${VITE_ENTRA_ADMIN_OBJECT_IDS:-}
+        VITE_ENTRA_API_SCOPES: ${VITE_ENTRA_API_SCOPES:-}
+    ports:
+      - "${APP_PORT:-5173}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

@@ -1,0 +1,14 @@
+# Allow only build inputs: exclude local environments, Git, caches and artifacts.
+*
+!Dockerfile
+!package.json
+!package-lock.json
+!index.html
+!tsconfig.json
+!vite.config.ts
+!src/
+!src/**
+!public/
+!public/**
+!docker/
+!docker/**

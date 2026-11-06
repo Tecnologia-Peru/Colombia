@@ -62,3 +62,11 @@ Si asignaste el rol y aún aparece acceso denegado, usa **Actualizar permisos** 
 
 
 Se configuró una cuenta administrativa explícita mediante `VITE_ENTRA_ADMIN_OBJECT_IDS`, usando el Object ID proporcionado y el tenant de la organización. Esa cuenta puede abrir el panel sin App Role; para las demás se conserva `administrator`. Reinicia Vite después del pull. Los permisos de API no cambian. Consulta la sección de usuarios autorizados de [la guía Entra](docs/entra-id.md).
+
+## Ejecutar como imagen Docker
+
+```sh
+docker compose --env-file .env.example up -d --build
+```
+
+Construye `ingenia-cyber:local` y expone Nginx en el puerto 5173 del anfitrión (8080 interno). Detén Vite si usa ese puerto. La imagen final sirve el frontend compilado sin Node ni Vite. Configuración de Entra, comandos de operación y exportación de la imagen: [guía Docker](docs/docker.md).
