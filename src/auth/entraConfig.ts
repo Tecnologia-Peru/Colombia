@@ -7,7 +7,7 @@ const guid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 // Object IDs belong to the configured tenant; email/display name are never used.
 export const adminObjectIds=(import.meta.env.VITE_ENTRA_ADMIN_OBJECT_IDS||'').split(/[;,\s]+/).map((id:string)=>id.trim().toLowerCase()).filter((id:string)=>guid.test(id)) as string[];
 export const configured=guid.test(tenantId)&&guid.test(clientId);
-export const redirectUri=window.location.origin+'/';
+export const redirectUri =   window.location.origin + import.meta.env.BASE_URL;
 export const loginScopes=['openid','profile','email',...apiScopes];
 export const msalConfig:Configuration={
  auth:{clientId,authority:`https://login.microsoftonline.com/${tenantId}`,redirectUri,postLogoutRedirectUri:redirectUri},
